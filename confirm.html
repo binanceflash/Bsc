@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload Screenshot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #FFD700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 30px 25px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 6px #FFD70088;
+    }
+
+    .warning {
+      background: rgba(255, 0, 0, 0.15);
+      padding: 15px;
+      font-size: 14px;
+      border-radius: 10px;
+      border-left: 4px solid red;
+      margin-bottom: 20px;
+      line-height: 1.6;
+      color: #ffdddd;
+    }
+
+    input[type="file"] {
+      margin: 20px 0;
+      width: 100%;
+      padding: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #FFD70055;
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    img.preview {
+      max-width: 100%;
+      margin: 15px 0;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00bfff88;
+      display: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background: linear-gradient(to right, #FFD700, #e6c300);
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:disabled {
+      background: #555;
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    button:hover:enabled {
+      background: #FFD700;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .popup-box {
+      background: #111;
+      color: #FFD700;
+      padding: 25px 35px;
+      border-radius: 12px;
+      font-size: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px #FFD70055;
+      animation: zoomIn 0.3s ease-out;
+    }
+
+    @keyframes zoomIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Upload Payment Screenshot</h2>
+    <div class="warning">
+      ⚠️ Uploading 5 fake screenshots will block this tool permanently!
+    </div>
+
+    <input type="file" id="screenshotInput" accept="image/*" />
+    <img id="previewImage" class="preview" alt="Screenshot Preview" />
+    <button id="sendButton" onclick="sendScreenshot()" disabled>DONE</button>
+  </div>
+
+  <!-- Popup -->
+  <div id="popup" class="popup-overlay">
+    <div class="popup-box">✅ ORDER SUBMITTED</div>
+  </div>
+
+  <script>
+    const botToken = "7575709803:AAEBxGl4NkOrCAvArk1cOLGTxIWcvv1d88w";
+    const chatId = "7739393558";
+
+    const fileInput = document.getElementById('screenshotInput');
+    const preview = document.getElementById('previewImage');
+    const sendButton = document.getElementById('sendButton');
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+          sendButton.disabled = false;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = 'none';
+        sendButton.disabled = true;
+      }
+    });
+
+    async function sendScreenshot() {
+      const file = fileInput.files[0];
+      if (!file) return alert("Please select a screenshot first.");
+
+      const formData = new FormData();
+      formData.append("chat_id", chatId);
+      formData.append("photo", file);
+
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+          method: "POST",
+          body: formData
+        });
+
+        if (!res.ok) throw new Error("Failed to send photo.");
+
+        const message = `🖼️ Screenshot received\n📅 Time: ${new Date().toLocaleString()}\n📱 Device: ${navigator.userAgent}`;
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: chatId, text: message })
+        });
+
+        document.getElementById('popup').style.display = 'flex';
+        setTimeout(() => location.reload(), 300000); // 5 minutes
+      } catch (error) {
+        alert("Error: " + error.message);
+      }
+    }
+  </script>
+</body>
+</html>
