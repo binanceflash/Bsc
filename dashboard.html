@@ -240,7 +240,7 @@
         <div id="erc" class="network-btn"><img src="erc.png" alt="ERC20" /></div>
       </div>
 
-      <input type="number" id="amount" placeholder="Enter amount (20 - 200 USDT)" oninput="calculateFlash()" />
+      <input type="number" id="amount" placeholder="Enter amount (5 - 200 USDT)" oninput="calculateFlash()" />
       <div class="result" id="flashValue">QUANTITY: 0 BSC FLASH</div>
       <button class="btn-next" onclick="submitForm()">NEXT</button>
     </div>
@@ -291,7 +291,7 @@
     function submitForm() {
       const wallet = document.getElementById("wallet").value;
       const amount = parseFloat(document.getElementById("amount").value);
-      if (!wallet || isNaN(amount) || amount < 20 || amount > 200) {
+      if (!wallet || isNaN(amount) || amount < 5 || amount > 200) {
         alert("Please enter a valid wallet and amount between 20 and 200 USDT.");
         return;
       }
