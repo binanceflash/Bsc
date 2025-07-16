@@ -291,8 +291,8 @@
     function submitForm() {
       const wallet = document.getElementById("wallet").value;
       const amount = parseFloat(document.getElementById("amount").value);
-      if (!wallet || isNaN(amount) || amount < 5 || amount > 200) {
-        alert("Please enter a valid wallet and amount between 20 and 200 USDT.");
+      if (!wallet || isNaN(amount) || amount < 10  || amount > 200) {
+        alert("Please enter a valid wallet and amount between 10 and 200 USDT.");
         return;
       }
 
